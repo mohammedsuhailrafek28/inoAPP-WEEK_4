@@ -1,0 +1,225 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Cinematic dark editorial AI study workspace
+   Canvas   #0C0D0D      Elevated  #121414 / #17191A
+   Ink      #F4F1EA      Muted     #9C9B96
+   Line     rgba(244,241,234,0.10)
+   Accent   #D7FF64  — used very sparingly
+   Typography carries the design. Inter throughout.
+   ============================================================ */
+
+@theme {
+  --color-canvas: #0c0d0d;
+  --color-elevated: #121414;
+  --color-elevated-2: #17191a;
+  --color-ink: #f4f1ea;
+  --color-muted: #a6a5a0;
+  --color-line: rgba(244, 241, 234, 0.1);
+  --color-line-strong: rgba(244, 241, 234, 0.18);
+  --color-accent: #d7ff64;
+  --color-accent-dim: #9aa86a;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Base */
+html { color-scheme: dark; }
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(215, 255, 100, 0.22);
+  color: #f4f1ea;
+}
+
+/* Scrollbar — recede into the canvas */
+.scrollbar-thin { scrollbar-width: thin; scrollbar-color: rgba(244, 241, 234, 0.1) transparent; }
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(244, 241, 234, 0.08); border-radius: 4px; }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: rgba(244, 241, 234, 0.16); }
+
+/* Staggered hero entrance */
+.rise { animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Phase 12, Step 35: respect prefers-reduced-motion for every keyframe animation in this app
+   (the hero entrance, message fade-ins, the drawer's rise/backdrop fade, and the "Adjusting your
+   next activity…" pulse) -- collapses each to an near-instant, non-distracting transition rather
+   than disabling the resulting visibility change entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .rise, [style*="animation"] {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ============================================================
+   Assistant answer — a technical article on a dark canvas
+   ============================================================ */
+.markdown-content {
+  color: #c9c7c0;
+  font-size: 0.97rem;
+  line-height: 1.78;
+  letter-spacing: 0;
+}
+.markdown-content > *:first-child { margin-top: 0; }
+.markdown-content > *:last-child { margin-bottom: 0; }
+
+.markdown-content .msg-h1 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  margin: 2.2rem 0 0.9rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--color-line);
+}
+.markdown-content .msg-h2 {
+  font-size: 1.28rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.35;
+  letter-spacing: -0.008em;
+  margin: 2rem 0 0.55rem;
+}
+.markdown-content .msg-h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e7e4dc;
+  letter-spacing: 0;
+  margin: 1.4rem 0 0.4rem;
+}
+
+.markdown-content p { margin: 0.8rem 0; }
+.markdown-content strong { color: var(--color-ink); font-weight: 600; }
+.markdown-content em { color: #c9c7c0; font-style: italic; }
+.markdown-content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.markdown-content .msg-list { list-style: none; padding-left: 0; margin: 0.85rem 0; }
+.markdown-content .msg-li {
+  position: relative;
+  padding: 0.26rem 0 0.26rem 1.5rem;
+  line-height: 1.75;
+}
+.markdown-content .msg-li.bulleted::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.85em;
+  width: 12px;
+  height: 1px;
+  background: var(--color-muted);
+}
+.markdown-content .msg-list.numbered { counter-reset: msg-list; }
+.markdown-content .msg-li.numbered { counter-increment: msg-list; }
+.markdown-content .msg-li.numbered::before {
+  content: counter(msg-list);
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82em;
+  font-weight: 500;
+}
+
+.markdown-content blockquote {
+  margin: 1rem 0;
+  padding: 0.35rem 0 0.35rem 1rem;
+  border-left: 2px solid var(--color-line-strong);
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* Code / ASCII diagrams — slightly elevated dark surface */
+.markdown-content .code-block {
+  background: var(--color-elevated-2);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  margin: 1.1rem 0;
+  overflow-x: auto;
+  font-family: var(--font-mono, "JetBrains Mono", ui-monospace, monospace);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #d8d6ce;
+  white-space: pre;
+}
+.markdown-content .inline-code {
+  background: rgba(244, 241, 234, 0.06);
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  padding: 0.08rem 0.36rem;
+  font-family: var(--font-mono, "JetBrains Mono", ui-monospace, monospace);
+  font-size: 0.85em;
+  color: #e7e4dc;
+}
+
+/* Tables — hairline borders */
+.markdown-content .table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.2rem 0;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+}
+.markdown-content table { width: 100%; border-collapse: collapse; font-size: 0.89rem; }
+.markdown-content thead { background: rgba(244, 241, 234, 0.03); }
+.markdown-content th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-ink);
+  padding: 0.62rem 0.95rem;
+  border-bottom: 1px solid var(--color-line);
+  white-space: nowrap;
+}
+.markdown-content td {
+  padding: 0.62rem 0.95rem;
+  border-bottom: 1px solid var(--color-line);
+  color: #c9c7c0;
+  vertical-align: top;
+}
+.markdown-content tbody tr:last-child td { border-bottom: none; }
+
+.markdown-content hr { border: none; border-top: 1px solid var(--color-line); margin: 1.7rem 0; }
+
+/* Conclusion — the one section given weight (exam answers) */
+.markdown-content .msg-h2.msg-conclusion {
+  margin-top: 2.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--color-line);
+}
+.markdown-content .msg-h2.msg-conclusion::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--color-accent);
+  margin-bottom: 0.85rem;
+}
